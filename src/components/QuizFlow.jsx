@@ -159,8 +159,12 @@ function generateStoryPrompt({ t, name, character, animal, theme, adaptation, la
     Their spirit animal is a ${t(`animals.${animal.name}`)} (${translatedTraits}).
     The story should follow a ${t("Adaptation")} cultural style and center around the chosen adventure: ${theme}.
 
-    In the story, make sure to clearly refer to the concept of a "spirit animal" using the Arabic term "الحيوان الرمزي".
-    IMPORTANT: The story must contain between 180 and 200 words — not less, not more. Do NOT write a 150-word story.
+    🛑 Do not begin writing until you are sure of this requirement:
+    ➡️ The story body must be **between 180 and 200 words ONLY**.
+    ❗ Do NOT write 140, 150, or 160 words. That is incorrect.
+    ❗ Stories with less than 180 or more than 200 words are invalid.
+
+    In the story, refer to the "spirit animal" using the Arabic phrase "الحيوان الرمزي".
 
     Do not name the animal as ${name}, and do not refer to the animal using the child's name.
     Do not compare the child to the animal.
@@ -172,7 +176,7 @@ function generateStoryPrompt({ t, name, character, animal, theme, adaptation, la
     The story, including title, body, and moral, must be in العربية الفصحى.
     The title must include the child's name (${name}).
 
-    Please return ONLY valid JSON using this format:
+    Return ONLY valid JSON in this exact format:
     {
       "title": "Title of the story in العربية الفصحى (must include ${name})",
       "story": "A story between 180 and 200 words written in العربية الفصحى.",
