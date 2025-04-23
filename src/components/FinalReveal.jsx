@@ -23,6 +23,27 @@ export default function FinalReveal({ userName, animal, adaptation, story, title
   const [emailSent, setEmailSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [printDone, setPrintDone] = useState(false);
+ 
+  const handlePrint = () => {
+    let printConfirmed = false;
+
+    const onBeforePrint = () => {
+      printConfirmed = true;
+    };
+
+    const onAfterPrint = () => {
+      if (printConfirmed) {
+        setPrintDone(true);
+      }
+      window.removeEventListener('beforeprint', onBeforePrint);
+      window.removeEventListener('afterprint', onAfterPrint);
+    };
+
+    window.addEventListener('beforeprint', onBeforePrint);
+    window.addEventListener('afterprint', onAfterPrint);
+    window.print();
+  };
 
   useEffect(() => {
     if (!hasStoredRef.current && animal && story && title && moral && userName) {
@@ -37,13 +58,9 @@ export default function FinalReveal({ userName, animal, adaptation, story, title
         },
         language: i18n.language
       });
-      hasStoredRef.current = true; 
+      hasStoredRef.current = true;
     }
   }, [animal, story, title, moral, userName, i18n.language]);
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const validateEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -224,6 +241,42 @@ export default function FinalReveal({ userName, animal, adaptation, story, title
               </div>
             </div>
           )}
+
+          {printDone && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+              <div
+                className="bg-white text-secondary rounded-xl p-6 w-[90%] max-w-md text-center relative"
+                dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+              >
+                <button
+                  onClick={() => setPrintDone(false)}
+                  className="absolute top-2 right-3 text-xl"
+                >
+                  ×
+                </button>
+                <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-8 w-8 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-2 0v4H8v-4h8z"
+                    />
+                  </svg>
+                </div>
+                <p className="mt-4 font-bold text-lg font-avenir">
+                  {t("print message")}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="mt-8 text-center print:hidden">
             <p className="font-avenir text-[20px] text-secondary">
               <span
